@@ -17,7 +17,9 @@ export default function Dashboard() {
     const [employees,setEmployees] = useState([])
     
     const getEmployees = async () => {
-        const querySnapshot = await getDocs(collection(db, "emplo"));
+        const querySnapshot = await getDocs(collection(db, "emplo"));   
+        setEmployees(querySnapshot);
+        
     }
 
     const username = "Dev"
@@ -67,7 +69,7 @@ export default function Dashboard() {
       </div>
       <div>
         {employees.forEach((doc) =>{
-            <span>{doc.id}</span>
+            return  <span>{doc.id}</span>
         })}
       </div>
 
