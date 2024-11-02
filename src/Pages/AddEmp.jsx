@@ -1,8 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import TagComponent from "../Util/TagComponent";
+import { getFirestore, collection, addDoc } from "firebase/firestore/lite";
+import { app } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
 
-function AddEmp () {
+// Define initial tags with their active/inactive states
+const initialTags = [
+  { name: "All", active: false },
+  { name: "Artificial Intelligence", active: false },
+  { name: "Data", active: false },
+  { name: "Development tools", active: false },
+  { name: "End user applications", active: false },
+  { name: "Infrastructure and cloud", active: false },
+  { name: "Media", active: false },
+  { name: "Operating systems", active: false },
+  { name: "Programming languages", active: false },
+  { name: "Science and medicine", active: false },
+  { name: "Security", active: false },
+  { name: "Social and communication", active: false },
+  { name: "Web", active: false },
+  { name: "Other", active: false },
+];
+
+function AddEmp() {
+  const navigate = useNavigate();
+  // Manage the tags' active state
+  const [tags, setTags] = useState(initialTags);
+
+  // Toggle active state for each tag
+  const toggleTag = (index) => {
+    setTags((prevTags) =>
+      prevTags.map((tag, i) =>
+        i === index ? { ...tag, active: !tag.active } : tag
+      )
+    );
+  };
+  //input values
+  const [username, setUserName] = useState("");
+  const [fname, setFName] = useState("");
+  const [lname, setLName] = useState("");
+  const [empid, setEmpid] = useState("");
+  const [email, setEmail] = useState("");
+  const [dept, setDept] = useState("");
+
+  //todb
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const db = getFirestore(app);
+    addDoc(collection(db, "emplo"), {
+      lname,
+      fname,
+      username,
+      empid,
+      dept,
+      email,
+    }).then(() => {
+      addDoc(collection(db, "skills"), {
+        empid,
+        tags,
+      }).then(() => {
+        navigate("/dashboard");
+      });
+    });
+  };
   return (
     <form className="p-28">
       <div className="space-y-12 ">
@@ -24,10 +86,12 @@ function AddEmp () {
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                   <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                    workcation.com/
+                    findployee.com/
                   </span>
                   <input
                     id="username"
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
                     name="username"
                     type="text"
                     placeholder="janesmith"
@@ -48,6 +112,8 @@ function AddEmp () {
               <div className="mt-2">
                 <input
                   id="first-name"
+                  value={empid}
+                  onChange={(e) => setEmpid(e.target.value)}
                   name="first-name"
                   type="text"
                   autoComplete="given-name"
@@ -77,6 +143,8 @@ function AddEmp () {
               <div className="mt-2">
                 <input
                   id="first-name"
+                  value={fname}
+                  onChange={(e) => setFName(e.target.value)}
                   name="first-name"
                   type="text"
                   autoComplete="given-name"
@@ -95,6 +163,8 @@ function AddEmp () {
               <div className="mt-2">
                 <input
                   id="last-name"
+                  value={lname}
+                  onChange={(e) => setLName(e.target.value)}
                   name="last-name"
                   type="text"
                   autoComplete="family-name"
@@ -113,6 +183,8 @@ function AddEmp () {
               <div className="mt-2">
                 <input
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -131,13 +203,15 @@ function AddEmp () {
               <div className="mt-2">
                 <select
                   id="country"
+                  value={dept}
+                  onChange={(e) => setDept(e.target.value)}
                   name="country"
                   autoComplete="country-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm/6"
                 >
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>Mexico</option>
+                  <option>Quality assurance</option>
+                  <option>project Development</option>
+                  <option>Testing</option>
                 </select>
               </div>
             </div>
@@ -153,7 +227,21 @@ function AddEmp () {
 
           <div className="mt-10 space-y-10">
             <fieldset>
-              <TagComponent />
+              <div className="flex flex-wrap gap-2 p-4 bg-transparent rounded-lg">
+                {tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className={`px-3 py-1 rounded-full cursor-pointer text-sm font-medium transition-colors ${
+                      tag.active
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-300 text-gray-700"
+                    }`}
+                    onClick={() => toggleTag(index)}
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
             </fieldset>
           </div>
         </div>
@@ -165,6 +253,7 @@ function AddEmp () {
         </button>
         <button
           type="submit"
+          onClick={handleSubmit}
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Save
@@ -172,6 +261,6 @@ function AddEmp () {
       </div>
     </form>
   );
-};
+}
 
 export default AddEmp;
