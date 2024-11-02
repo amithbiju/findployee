@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import TagComponent from "../Util/TagComponent";
 import { getFirestore, collection, addDoc } from "firebase/firestore/lite";
@@ -27,6 +27,7 @@ function AddEmp() {
   const navigate = useNavigate();
   // Manage the tags' active state
   const [tags, setTags] = useState(initialTags);
+  const [selectedSkills, setSelectedSkills] = useState([]);
 
   // Toggle active state for each tag
   const toggleTag = (index) => {
@@ -36,6 +37,13 @@ function AddEmp() {
       )
     );
   };
+
+  // Update selected skills array whenever tags change
+  useEffect(() => {
+    const activeTags = tags.filter((tag) => tag.active).map((tag) => tag.name);
+    setSelectedSkills(activeTags);
+  }, [tags]);
+
   //input values
   const [username, setUserName] = useState("");
   const [fname, setFName] = useState("");
@@ -43,6 +51,7 @@ function AddEmp() {
   const [empid, setEmpid] = useState("");
   const [email, setEmail] = useState("");
   const [dept, setDept] = useState("");
+  const [exp, setExp] = useState("");
 
   //todb
   const handleSubmit = (e) => {
@@ -59,7 +68,8 @@ function AddEmp() {
     }).then(() => {
       addDoc(collection(db, "skills"), {
         empid,
-        tags,
+        selectedSkills,
+        exp,
       }).then(() => {
         navigate("/dashboard");
       });
@@ -227,20 +237,62 @@ function AddEmp() {
 
           <div className="mt-10 space-y-10">
             <fieldset>
-              <div className="flex flex-wrap gap-2 p-4 bg-transparent rounded-lg">
-                {tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className={`px-3 py-1 rounded-full cursor-pointer text-sm font-medium transition-colors ${
-                      tag.active
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-300 text-gray-700"
-                    }`}
-                    onClick={() => toggleTag(index)}
+              <div>
+                <div className="flex flex-wrap gap-2 p-4 bg-transparent rounded-lg">
+                  {tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className={`px-3 py-1 rounded-full cursor-pointer text-sm font-medium transition-colors ${
+                        tag.active
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-300 text-gray-700"
+                      }`}
+                      onClick={() => toggleTag(index)}
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Display selected skills */}
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold">Selected Skills:</h3>
+                  <ul>
+                    {selectedSkills.map((skill, index) => (
+                      <li key={index} className="text-blue-500">
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="country"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Experience [No.of years]
+                </label>
+                <div className="mt-2">
+                  <select
+                    id="country"
+                    value={exp}
+                    onChange={(e) => setExp(e.target.value)}
+                    name="country"
+                    autoComplete="country-name"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm/6"
                   >
-                    {tag.name}
-                  </span>
-                ))}
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                  </select>
+                </div>
               </div>
             </fieldset>
           </div>
