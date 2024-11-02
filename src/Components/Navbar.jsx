@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import './Navbar.css'
 
 const Navbar = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  }
   return (
     <nav className="bg-white border-gray-900 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
@@ -20,13 +24,8 @@ const Navbar = () => {
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <button
-            type="button"
             className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
-            id="user-menu-button"
-            aria-expanded="false"
-            data-dropdown-toggle="user-dropdown"
-            data-dropdown-placement="bottom"
-          >
+           onClick={toggleDropdown}>
             <span className="sr-only">Open user menu</span>
             <img
               className="w-8 h-8 rounded-full"
@@ -34,9 +33,9 @@ const Navbar = () => {
               alt="user photo"
             />
           </button>
-
+          {dropdownOpen && (
           <div
-            className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow "
+            className="dropdown-menu"
             id="user-dropdown"
           >
             <div className="px-4 py-3">
@@ -59,27 +58,12 @@ const Navbar = () => {
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                 >
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                >
-                  Earnings
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                >
                   Sign out
                 </a>
               </li>
             </ul>
           </div>
+          )}
           <button
             data-collapse-toggle="navbar-user"
             type="button"
