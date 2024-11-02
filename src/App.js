@@ -8,6 +8,7 @@ import Dashboard from "./Pages/dashboard";
 import CreateTeam from "./Pages/createTeam";
 import "./Pages/Home.css";
 import EditEmp from "./Pages/EditEmp";
+import './Components/Navbar.css'
 
 function App() {
   return (
