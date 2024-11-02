@@ -1,43 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+
 
 export default function CreateTeam() {
+  const [isCustom,setIsCustom] = useState(true);
+  const [prompt,setPrompt] = useState('');
+
+
+  const buttonStyles =
+  "bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50";
+
   return (
-    <div class="flex flex-col md:flex-row">
-        <div class="bg-blue-600 text-white p-8 md:w-1/2 flex flex-col justify-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">What is Google Summer of Code?</h2>
-            <p class="text-lg mb-6">
-            Google Summer of Code is a global, online program focused on bringing new contributors into open source software development. GSoC Contributors work with an open source organization on a 12+ week programming project under the guidance of mentors.
-            </p>
-            <button class="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-blue-600">
-            Learn more
-            </button>
+    <div className='ml-5'>
+      <div className='flex flex-cols gap-4 my-2 items-center justify-start'>
+      <h3 className='font-semibold'>Enter Project Name : </h3>
+      <input type="text" className="border rounded-lg border-gray-400 p-2" placeholder='Project...'></input>
+      </div>
+      <div className='flex flex-cols gap-4 my-2 items-center justify-start'>
+      <h3 className='font-semibold'>Project Priority : </h3>
+      High,Medium,Low
+      </div>
+      <div className='flex flex-cols gap-4 my-2 items-center justify-center'>
+        <button className={buttonStyles} onClick={()=>setIsCustom(false)}>Ai assisted team creation</button>
+        <button className={buttonStyles} onClick={()=>setIsCustom(true)}>Customised Team creation</button>
+      </div>
+      <div>
+      {isCustom?
+        <div>
+
         </div>
-        <div class="bg-gray-800 text-white p-8 md:w-1/2 grid grid-cols-2 gap-6 md:gap-8 text-center">
-            <div>
-            <p class="text-3xl font-bold">20K+</p>
-            <p class="text-sm">New Contributors</p>
-            </div>
-            <div>
-            <p class="text-3xl font-bold">116</p>
-            <p class="text-sm">Countries</p>
-            </div>
-            <div>
-            <p class="text-3xl font-bold">1000+</p>
-            <p class="text-sm">Open Source Organizations</p>
-            </div>
-            <div>
-            <p class="text-3xl font-bold">45M+</p>
-            <p class="text-sm">Lines of Code</p>
-            </div>
-            <div>
-            <p class="text-3xl font-bold">19K+</p>
-            <p class="text-sm">Mentors</p>
-            </div>
-            <div>
-            <p class="text-3xl font-bold">19</p>
-            <p class="text-sm">Years</p>
-            </div>
+        :
+        <div className=''>
+          <input type='text' className='max-w-screen m-3 border-2 w-[75%] rounded-lg h-80 bg-gray-50' onChange={(e)=>{setPrompt(e.target.value)}}></input>
         </div>
+      }
+      </div>
     </div>
   )
 }
