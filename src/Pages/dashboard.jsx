@@ -129,7 +129,7 @@ export default function Dashboard() {
                     <td className="px-6 py-4">{doc.exp}</td>
                     <td className="px-6 py-4">
                       <Link
-                        to={`/edit/${doc._id}`}
+                        to={`/editemp/${doc.id}`}
                         style={{ textDecoration: "none" }}
                       >
                         <a
