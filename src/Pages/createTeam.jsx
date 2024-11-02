@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 
 
 export default function CreateTeam() {
@@ -31,9 +29,12 @@ export default function CreateTeam() {
 
         </div>
         :
-        <div className=''>
-          <input type='text' className='max-w-screen m-3 border-2 w-[75%] rounded-lg h-80 bg-gray-50' onChange={(e)=>{setPrompt(e.target.value)}}></input>
+        <div className='flex items-center justify-center'>
+          {/* /<input type='text' size={100} maxLength={100} className='m-3 border-2 rounded-lg text-start bg-gray-50 h-40 ' placeholder="Enter your prompt..." onChange={(e)=>{setPrompt(e.target.value)}}></input> */}
+
+          <textarea maxLength={100} rows={4} cols={50} className='m-3 border-2 rounded-lg text-start bg-gray-50 ' placeholder="Enter your prompt..." onChange={(e)=>{setPrompt(e.target.value);console.log(prompt)}} name="promptSpace" />
         </div>
+        
       }
       </div>
     </div>
