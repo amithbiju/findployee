@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { collection,getDocs, getFirestore, onSnapshot } from "firebase/firestore";
 import { app } from "../firebase/config";
+import axios from 'axios';
 
 export default function CreateTeam() {
   const [isCustom,setIsCustom] = useState(true);
@@ -10,6 +11,8 @@ export default function CreateTeam() {
   const [currTeam,setCurrTeam] = useState([])
   const [showCurrTeam,setShowCurrTeam] = useState(false)
   const [priority,setPriority] = useState('low');
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
   useEffect(() => {
     // Set up Firestore listener and store unsubscribe function
     const db = getFirestore(app);
@@ -28,9 +31,23 @@ export default function CreateTeam() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(()=>{
-
-  },[currTeam])
+  const generatePrompt = async () =>{
+    const jsonData = {
+      query:prompt
+    };
+    try {
+      const response = await axios.post('http://localhost:8000/', jsonData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      setResponseData(response.data); // Handle successful response
+      alert(response.data)
+    } catch (err) {
+      setError(err.response ? err.response.data : 'An error occurred');
+      alert(err) // Handle error
+    }
+  } 
 
   const buttonStyles =
   "bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50";
@@ -109,7 +126,7 @@ export default function CreateTeam() {
           {/* /<input type='text' size={100} maxLength={100} className='m-3 border-2 rounded-lg text-start bg-gray-50 h-40 ' placeholder="Enter your prompt..." onChange={(e)=>{setPrompt(e.target.value)}}></input> */}
 
           <textarea maxLength={100} rows={4} cols={50} className='m-3 border-2 rounded-lg text-start bg-gray-50 ' placeholder="Enter your prompt..." onChange={(e)=>{setPrompt(e.target.value);console.log(prompt)}} name="promptSpace" />
-            <button className={buttonStyles}>Generate Team</button>
+            <button className={buttonStyles} onClick={() => {generatePrompt()}}>Generate Team</button>
         </div>
         
       }
