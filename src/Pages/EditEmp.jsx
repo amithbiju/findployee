@@ -23,7 +23,7 @@ const initialTags = [
   { name: "Other", active: false },
 ];
 
-function AddEmp() {
+const EditEmp = () => {
   const navigate = useNavigate();
   // Manage the tags' active state
   const [tags, setTags] = useState(initialTags);
@@ -343,6 +343,6 @@ function AddEmp() {
       </div>
     </form>
   );
-}
+};
 
-export default AddEmp;
+export default EditEmp;

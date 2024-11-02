@@ -6,7 +6,8 @@ import Login from "./Pages/Login";
 import AddEmp from "./Pages/AddEmp";
 import Dashboard from "./Pages/dashboard";
 import CreateTeam from "./Pages/createTeam";
-import './Pages/Home.css'
+import "./Pages/Home.css";
+import EditEmp from "./Pages/EditEmp";
 
 function App() {
   return (
@@ -18,8 +19,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/addemp" element={<AddEmp />} />
+            <Route path="/editemp" element={<EditEmp />}>
+              <Route path=":productId" element={<EditEmp />} />
+            </Route>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/createteam" element={<CreateTeam  />} />
+            <Route path="/createteam" element={<CreateTeam />} />
           </Routes>
         </main>
       </Router>
