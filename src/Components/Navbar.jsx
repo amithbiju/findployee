@@ -1,25 +1,22 @@
 import React, { useContext, useState } from "react";
-import './Navbar.css'
+import "./Navbar.css";
 import { AuthContext } from "../Contexts/authContexts/context";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const {user} = useContext(AuthContext)
+  const { setUserLoggedin } = useContext(AuthContext);
   const auth = getAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const {navigate} = useNavigate()
+  const { navigate } = useNavigate();
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
-  }
-  const { userLoggedIn } = useContext(AuthContext); 
+  };
+  const { userLoggedIn } = useContext(AuthContext);
   return (
-    <nav className="bg-white border-gray-900 ">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
-        <a
-          href="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
+    <nav className="bg-transparent border-gray-900  ">
+      <div className="absolute inset-x-0 top-0 z-50 max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           {/* <img
             src="https://flowbite.com/docs/images/logo.svg"
             className="h-8"
@@ -30,52 +27,54 @@ const Navbar = () => {
           </span>
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          {userLoggedIn?(<button
-            className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
-           onClick={toggleDropdown}>
-            <span className="sr-only">Open user menu</span>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="/docs/images/people/profile-picture-3.jpg"
-              alt="user photo"
-            />
-          </button>): <a href='/login'>Login</a>}
+          {userLoggedIn ? (
+            <button
+              className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
+              onClick={toggleDropdown}
+            >
+              <span className="sr-only">Open user menu</span>
+              <img
+                className="w-8 h-8 rounded-full"
+                src="/docs/images/people/profile-picture-3.jpg"
+                alt="user photo"
+              />
+            </button>
+          ) : (
+            <a href="/login">Login</a>
+          )}
           {dropdownOpen && (
-          <div
-            className="dropdown-menu"
-            id="user-dropdown"
-          >
-            <div className="px-4 py-3">
-              <span className="block text-sm text-gray-900 ">Bonnie Green</span>
-              <span className="block text-sm  text-gray-500 truncate ">
-                name@flowbite.com
-              </span>
+            <div className="dropdown-menu" id="user-dropdown">
+              <div className="px-4 py-3">
+                <span className="block text-sm text-gray-900 ">
+                  Bonnie Green
+                </span>
+                <span className="block text-sm  text-gray-500 truncate ">
+                  name@flowbite.com
+                </span>
+              </div>
+              <ul className="py-2" aria-labelledby="user-menu-button">
+                <li>
+                  <a
+                    href="/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
+                  >
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/login"
+                    onClick={() => {
+                      setUserLoggedin(false);
+                    }}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
+                  >
+                    <button className="buttons">SignOut</button>
+                    Sign out
+                  </a>
+                </li>
+              </ul>
             </div>
-            <ul className="py-2" aria-labelledby="user-menu-button">
-              <li>
-                <a
-                  href="/dashboard"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                >
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/login"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                >
-                  {user && <button className='buttons' onClick={()=>{
-            
-            signOut(auth).then(() => {
-              // Sign-out successful.
-              navigate('/login')
-            })
-          }}>SignOut</button>}Sign out
-                </a>
-              </li>
-            </ul>
-          </div>
           )}
           <button
             data-collapse-toggle="navbar-user"

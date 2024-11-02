@@ -8,7 +8,8 @@ import Dashboard from "./Pages/dashboard";
 import CreateTeam from "./Pages/createTeam";
 import "./Pages/Home.css";
 import EditEmp from "./Pages/EditEmp";
-import './Components/Navbar.css'
+import "./Components/Navbar.css";
+import ViewTeam from "./Pages/ViewTeam";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             </Route>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/createteam" element={<CreateTeam />} />
+            <Route path="/viewteams" element={<ViewTeam />} />
           </Routes>
         </main>
       </Router>
