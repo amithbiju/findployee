@@ -3,42 +3,14 @@ require('dotenv').config();
 const KEY = process.env.API_KEY;
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { GoogleAIFileManager } = require ("@google/generative-ai/server");
 
-
-// Initialize GoogleGenerativeAI with your API_KEY.
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-// Initialize GoogleAIFileManager with your API_KEY.
-const fileManager = new GoogleAIFileManager(process.env.API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-const model = genAI.getGenerativeModel({
-  // Choose a Gemini model.
-  model: "gemini-1.5-flash",
+const prompt = '"Employee 1: {    skills: ["Python", "Machine Learning", "Data Analysis"]}Employee 2: {    skills: ["JavaScript", "React", "Frontend Development"]}Employee 3: {    skills: ["SQL", "Data Engineering", "Cloud Computing"]}"' + "Give only the employee number in a json format with no additional text for a task that requires strong Python and Machine Learning skills.";
+
+const result = async() =>{ await model.generateContent(prompt).then(a => {
+    console.log(a.response.text());
 });
-
-// Upload the file and specify a display name.
-
-const uploadResponse = async ()=> await fileManager.uploadFile("emp.txt", {
-  mimeType: "text/plain",
-  displayName: "Gemini 1.5 PDF",
-});
-
-// View the response.
-console.log(
-  `Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`,
-);
-
-// Generate content using text and the URI reference for the uploaded file.
-
-const result = async () => await model.generateContent([
-  {
-    fileData: {
-      mimeType: uploadResponse.file.mimeType,
-      fileUri: uploadResponse.file.uri,
-    },
-  },
-  { text: "Identify the best employee(s) for a task that requires strong Python and Machine Learning skills." },
-]);
-
-// Output the generated text to the console
-console.log(result.response.text());
+}
+console.log(result());
