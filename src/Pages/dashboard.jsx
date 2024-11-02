@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import { app } from "../firebase/config";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   // styling
@@ -127,12 +128,17 @@ export default function Dashboard() {
                     <td className="px-6 py-4">{doc.dept}</td>
                     <td className="px-6 py-4">{doc.exp}</td>
                     <td className="px-6 py-4">
-                      <a
-                        href="#"
-                        className="font-medium text-blue-600  hover:underline"
+                      <Link
+                        to={`/edit/${doc._id}`}
+                        style={{ textDecoration: "none" }}
                       >
-                        Edit
-                      </a>
+                        <a
+                          href="#"
+                          className="font-medium text-blue-600  hover:underline"
+                        >
+                          Edit
+                        </a>
+                      </Link>
                     </td>
                   </tr>
                 );
