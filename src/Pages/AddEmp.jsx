@@ -1,7 +1,7 @@
 import React from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 
-const AddEmp = () => {
+function AddEmp () {
   return (
     <form>
       <div className="space-y-12">
@@ -16,7 +16,7 @@ const AddEmp = () => {
             <div className="sm:col-span-4">
               <label
                 htmlFor="username"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block text-sm/6 font-medium  text-gray-900"
               >
                 Username
               </label>

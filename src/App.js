@@ -5,6 +5,7 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import AddEmp from "./Pages/AddEmp";
 import Dashboard from "./Pages/dashboard";
+import CreateTeam from "./Pages/createTeam";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/addemp" element={<AddEmp />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/createteam" element={<CreateTeam  />} />
           </Routes>
         </main>
       </Router>
