@@ -1,16 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-
+import { collection,getDocs } from 'firebase/firestore';
+import { db } from '../firebase/config';
 export default function Dashboard() {
-    // styling
     
+    useEffect(()=>{
+        getEmployees();
+    },[]);
+    
+    // styling    
     //const buttonStyles = 'bg-black px-5 py-2 my-3 text-white rounded-lg'
     const buttonStyles = 'bg-blue-500 text-white font-medium py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50'
     const navigate = useNavigate();
-
-    //end styling
     const [search,setSearch] = useState('');
+    const [employees,setEmployees] = useState([])
+    
+    const getEmployees = async () => {
+        const querySnapshot = await getDocs(collection(db, "emplo"));
+    }
 
     const username = "Dev"
 
@@ -28,7 +36,7 @@ export default function Dashboard() {
 
     return (
         <div>
-    <div className='flex flex-col md:flex-row'>
+    <div className='flex flex-col md:flex-row '>
       <div className='bg-gradient-to-r from-blue-600 to-blue-500 text-white p-8 md:w-1/2 flex flex-col justify-center '>
         <span className='text-3xl md:text-4xl font-bold mb-4'>Welcome, {username}</span>
         <p class="text-lg mb-6">
@@ -57,6 +65,12 @@ export default function Dashboard() {
         <input className='p-4 border-2 h-10 items-center justify-center' placeholder='Enter employee name' type='text' onChange={(e)=>{setSearch(e.target.value)}}></input>
         <MagnifyingGlassIcon onClick={() => {alert(search)}} className='max-w-5 '/>
       </div>
+      <div>
+        {employees.forEach((doc) =>{
+            <span>{doc.id}</span>
+        })}
+      </div>
+
       </div>
   )
 }
