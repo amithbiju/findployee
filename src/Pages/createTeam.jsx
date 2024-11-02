@@ -9,6 +9,7 @@ export default function CreateTeam() {
   const [employees, setEmployees] = useState([]);
   const [currTeam,setCurrTeam] = useState([])
   const [showCurrTeam,setShowCurrTeam] = useState(false)
+  const [priority,setPriority] = useState('low');
   useEffect(() => {
     // Set up Firestore listener and store unsubscribe function
     const db = getFirestore(app);
@@ -40,10 +41,13 @@ export default function CreateTeam() {
       <h3 className='font-semibold'>Enter Project Name : </h3>
       <input type="text" className="border rounded-lg border-gray-400 p-1" placeholder='Project...'></input>
       </div>
-      <div className='flex flex-cols gap-4 my-2 items-center justify-start'>
+      <div className='flex flex-cols gap-2 my-2 items-center justify-start'>
       <h3 className='font-semibold'>Project Priority : </h3>
-      High,Medium,Low
+      <button className='px-5 font-semibold text-white rounded-lg bg-red-500' onClick={()=>{setPriority('high')}}>High</button>
+      <button className='px-5 font-semibold text-white rounded-lg bg-blue-500' onClick={()=>{setPriority('medium')}}>Medium</button>
+      <button className='px-5 font-semibold text-white rounded-lg bg-green-500' onClick={()=>{setPriority('low')}}>Low</button>
       </div>
+      Priority set to {priority}
       <div className='flex flex-cols gap-4 my-2 items-center justify-center'>
         <button className={buttonStyles} onClick={()=>setIsCustom(false)}>Ai assisted team creation</button>
         <button className={buttonStyles} onClick={()=>setIsCustom(true)}>Customised Team creation</button>
