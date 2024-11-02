@@ -11,8 +11,10 @@ export default function CreateTeam() {
   const [currTeam,setCurrTeam] = useState([])
   const [showCurrTeam,setShowCurrTeam] = useState(false)
   const [priority,setPriority] = useState('low');
-  const [responseData, setResponseData] = useState(null);
+  const [responseData, setResponseData] = useState('');
   const [error, setError] = useState(null);
+  const [skills,setSkills] = useState([]);
+
   useEffect(() => {
     // Set up Firestore listener and store unsubscribe function
     const db = getFirestore(app);
@@ -41,8 +43,10 @@ export default function CreateTeam() {
           'Content-Type': 'application/json'
         }
       });
-      setResponseData(response.data); // Handle successful response
-      alert(response.data)
+      setResponseData(response.data);
+      const promptresponse = response.data
+      const names = promptresponse.split(","); // Handle successful response
+      alert(names)
     } catch (err) {
       setError(err.response ? err.response.data : 'An error occurred');
       alert(err) // Handle error
