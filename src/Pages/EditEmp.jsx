@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import TagComponent from "../Util/TagComponent";
-import { getFirestore, collection, addDoc } from "firebase/firestore/lite";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { app } from "../firebase/config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Define initial tags with their active/inactive states
 const initialTags = [
@@ -25,9 +31,32 @@ const initialTags = [
 
 const EditEmp = () => {
   const navigate = useNavigate();
+  const { productId } = useParams();
   // Manage the tags' active state
   const [tags, setTags] = useState(initialTags);
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    // Set up Firestore listener and store unsubscribe function
+    const db = getFirestore(app);
+    const prodtCol = collection(db, "emplo");
+    const unsubscribe = onSnapshot(prodtCol, (snapshot) => {
+      const prodtList = snapshot.docs.map((product) => ({
+        ...product.data(),
+        id: product.id,
+      }));
+      console.log(prodtList);
+      // Update the state with the retrieved data
+      setEmployees(prodtList);
+      //filter
+      const emp = employees.find((e) => e.id === productId);
+      console.log(emp);
+      //setFName(emp.fname);
+    });
+
+    // Return the unsubscribe function to clean up the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
   // Toggle active state for each tag
   const toggleTag = (index) => {
