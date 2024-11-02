@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 
@@ -10,11 +11,12 @@ const firebaseConfig = {
   projectId: "findployee",
   storageBucket: "findployee.firebasestorage.app",
   messagingSenderId: "1080850327746",
-  appId: "1:1080850327746:web:5b25a64a812002ba57335b"
+  appId: "1:1080850327746:web:5b25a64a812002ba57335b",
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
 const auth = getAuth(app);
 
 export {auth,app};
