@@ -27,10 +27,6 @@ const Home = () => {
             <h4 class="text-balance text-xl pt-4 font-semibold tracking-tight text-gray-900 sm:text-xl">
               Connecting employers with employees
             </h4>
-            <p class="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat.
-            </p>
             <div class="mt-10 flex items-center justify-center gap-x-6">
               <a
                 href="#"
