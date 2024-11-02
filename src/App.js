@@ -6,6 +6,7 @@ import Login from "./Pages/Login";
 import AddEmp from "./Pages/AddEmp";
 import Dashboard from "./Pages/dashboard";
 import CreateTeam from "./Pages/createTeam";
+import "./Pages/Home.css";
 import EditEmp from "./Pages/EditEmp";
 
 function App() {
