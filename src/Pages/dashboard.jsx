@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { collection, getDocs } from "firebase/firestore";
-import { orderBy, query, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { getFirestore, collection, onSnapshot } from "firebase/firestore";
+import { app } from "../firebase/config";
+
 export default function Dashboard() {
   // styling
   //const buttonStyles = 'bg-black px-5 py-2 my-3 text-white rounded-lg'
@@ -14,13 +14,14 @@ export default function Dashboard() {
   const [employees, setEmployees] = useState([]);
   useEffect(() => {
     // Set up Firestore listener and store unsubscribe function
+    const db = getFirestore(app);
     const prodtCol = collection(db, "emplo");
     const unsubscribe = onSnapshot(prodtCol, (snapshot) => {
       const prodtList = snapshot.docs.map((product) => ({
         ...product.data(),
         id: product.id,
       }));
-
+      console.log(prodtList);
       // Update the state with the retrieved data
       setEmployees(prodtList);
     });
@@ -90,10 +91,55 @@ export default function Dashboard() {
           className="max-w-5 "
         />
       </div>
-      <div>
-        {employees.forEach((doc) => {
-          return <span>{doc.id}</span>;
-        })}
+      <div className="pl-20 pr-20">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  ID
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Department
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Experience
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {employees.map((doc) => {
+                return (
+                  <tr className="odd:bg-white  even:bg-gray-50  border-b ">
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {doc.fname}
+                    </th>
+                    <td className="px-6 py-4">{doc.empid}</td>
+                    <td className="px-6 py-4">{doc.dept}</td>
+                    <td className="px-6 py-4">{doc.exp}</td>
+                    <td className="px-6 py-4">
+                      <a
+                        href="#"
+                        className="font-medium text-blue-600  hover:underline"
+                      >
+                        Edit
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
