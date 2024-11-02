@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import './Navbar.css'
+import { AuthContext } from "../Contexts/authContexts/context";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const {user} = useContext(AuthContext)
+  const auth = getAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const {navigate} = useNavigate()
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   }
+  const { userLoggedIn } = useContext(AuthContext); 
   return (
     <nav className="bg-white border-gray-900 ">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
@@ -23,7 +30,7 @@ const Navbar = () => {
           </span>
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
+          {userLoggedIn?(<button
             className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
            onClick={toggleDropdown}>
             <span className="sr-only">Open user menu</span>
@@ -32,7 +39,7 @@ const Navbar = () => {
               src="/docs/images/people/profile-picture-3.jpg"
               alt="user photo"
             />
-          </button>
+          </button>): <a href='/login'>Login</a>}
           {dropdownOpen && (
           <div
             className="dropdown-menu"
@@ -47,7 +54,7 @@ const Navbar = () => {
             <ul className="py-2" aria-labelledby="user-menu-button">
               <li>
                 <a
-                  href="#"
+                  href="/dashboard"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                 >
                   Dashboard
@@ -55,10 +62,16 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/login"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                 >
-                  Sign out
+                  {user && <button className='buttons' onClick={()=>{
+            
+            signOut(auth).then(() => {
+              // Sign-out successful.
+              navigate('/login')
+            })
+          }}>SignOut</button>}Sign out
                 </a>
               </li>
             </ul>
@@ -96,7 +109,7 @@ const Navbar = () => {
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
             <li>
               <a
-                href="#"
+                href="/"
                 className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 "
                 aria-current="page"
               >
@@ -105,7 +118,7 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/dashboard"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
               >
                 Dashboard
@@ -113,7 +126,7 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/EditEmp"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 "
               >
                 Teams

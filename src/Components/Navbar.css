@@ -25,13 +25,14 @@
     display: block;
     position: absolute;
     top: 07%;
-    right: 0;
+    right: 8%;
     background-color: white;
     color: black;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     overflow: hidden;
     z-index: 1000;
+	min-width: 150px;
 }
 
 .dropdown-menu div {
@@ -43,4 +44,8 @@
 
 .dropdown-menu div:hover {
     background-color: #f1f1f1;
+}
+
+.heroicons { 
+	position: relative; z-index: 500; /* Ensure Heroicons are below the navbar */ 
 }

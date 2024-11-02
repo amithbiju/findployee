@@ -1,3 +1,11 @@
 .content {
     padding-top: 60px; /* Adjust this value based on your navbar height */
 }
+
+.container { 
+	display: flex; flex-direction: column; 
+} 
+
+.heroicons { 
+	margin-top: 60px; /* Adjust based on your navbar height */ 
+}
