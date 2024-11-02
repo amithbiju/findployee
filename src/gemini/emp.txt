@@ -1,0 +1,9 @@
+Employee 1: {
+    skills: ["Python", "Machine Learning", "Data Analysis"]
+}
+Employee 2: {
+    skills: ["JavaScript", "React", "Frontend Development"]
+}
+Employee 3: {
+    skills: ["SQL", "Data Engineering", "Cloud Computing"]
+}
