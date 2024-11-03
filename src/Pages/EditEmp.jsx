@@ -125,11 +125,11 @@ const EditEmp = () => {
       const skillsDocRef = doc(db, "skills", productId); // Reference to the skills document
       await updateDoc(skillsDocRef, {
         empid,
-        selectedSkills
+        selectedSkills,
       }).then(() => {
         navigate("/dashboard");
       });
-    });
+    } catch {}
   };
   return (
     <form className="p-28">
