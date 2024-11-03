@@ -411,11 +411,7 @@ export default function CreateTeam() {
             </div>
           </div>
         )}
-        <div className="flex flex-cols gap-4 my-2 items-center justify-center">
-              <button className={buttonStyles} onClick={handleSubmitTeam}>
-                Create Team
-              </button>
-            </div>
+        
       </div>
     </div>
   );
