@@ -31,7 +31,7 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, []);
 
-  const username = "Dev";
+  const username = "John Doe";
 
   const addEmployeeOnClick = () => {
     navigate("/addemp");

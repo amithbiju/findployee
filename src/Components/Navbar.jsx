@@ -1,14 +1,10 @@
 import React, { useContext, useState } from "react";
 import "./Navbar.css";
 import { AuthContext } from "../Contexts/authContexts/context";
-import { getAuth, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { setUserLoggedin } = useContext(AuthContext);
-  const auth = getAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { navigate } = useNavigate();
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -17,11 +13,6 @@ const Navbar = () => {
     <nav className="bg-transparent border-gray-900  ">
       <div className="absolute inset-x-0 top-0 z-50 max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          {/* <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8"
-            alt="Flowbite Logo"
-          /> */}
           <span className="self-center text-2xl font-semibold whitespace-nowrap ">
             findployee
           </span>
@@ -35,7 +26,7 @@ const Navbar = () => {
               <span className="sr-only">Open user menu</span>
               <img
                 className="w-8 h-8 rounded-full"
-                src="/docs/images/people/profile-picture-3.jpg"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyuV7-Bcw9pe-ZjEzEyjUbR05jnouC2GOjjQ&s"
                 alt="user photo"
               />
             </button>
@@ -46,10 +37,10 @@ const Navbar = () => {
             <div className="dropdown-menu" id="user-dropdown">
               <div className="px-4 py-3">
                 <span className="block text-sm text-gray-900 ">
-                  Bonnie Green
+                  John Doe
                 </span>
                 <span className="block text-sm  text-gray-500 truncate ">
-                  name@flowbite.com
+                  johndoe@yahoo.com
                 </span>
               </div>
               <ul className="py-2" aria-labelledby="user-menu-button">
@@ -69,8 +60,7 @@ const Navbar = () => {
                     }}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                   >
-                    <button className="buttons">SignOut</button>
-                    Sign out
+                    <button className="buttons">Logout</button>
                   </a>
                 </li>
               </ul>
