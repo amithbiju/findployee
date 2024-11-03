@@ -92,11 +92,11 @@ const EditEmp = () => {
       lname,
       fname,
       username,
-      empid,
+      empid,  
       dept,
       email,
       exp,
-      available,
+      available
     }).then(() => {
       addDoc(collection(db, "skills"), {
         empid,
