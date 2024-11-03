@@ -6,6 +6,7 @@ import {
   getDocs,
   getFirestore,
   onSnapshot,
+  doc,
 } from "firebase/firestore";
 import { app } from "../firebase/config";
 import axios from "axios";
@@ -18,7 +19,7 @@ export default function CreateTeam() {
   const [prompt, setPrompt] = useState("");
   const [employees, setEmployees] = useState([]);
   const [currTeam, setCurrTeam] = useState([]);
-  const [showCurrTeam, setShowCurrTeam] = useState(false);
+  const [showCurrTeam, setShowCurrTeam] = useState([]);
   const [priority, setPriority] = useState("low");
   const [responseData, setResponseData] = useState("");
   const [error, setError] = useState(null);
@@ -90,9 +91,21 @@ export default function CreateTeam() {
       // Extract the empid of the suitable candidates
       const empIds = suitableCandidates.map(candidate => candidate.empid);
       const finalTeam = employees.filter( emp => ( empIds.includes(emp.empid))).filter(emp =>emp.available==true)
-      setShowCurrTeam(finalTeam);
+      console.log(finalTeam);
+      setCurrTeam(finalTeam)
+
+      const finalTeamEmpIds = employees
+    .filter(emp => empIds.includes(emp.empid))
+    .filter(emp => emp.available === true)
+    .map(emp => emp.id);
+  console.log(finalTeamEmpIds)
+  setShowCurrTeam(finalTeamEmpIds)
+
+      // finalTeam.forEach(d => {
+      //   setShowCurrTeam((prev)=>[...prev,d.empid,d.fname])
+      // });
+
       //alert(promptresponse + " => \n" + JSON.stringify(skills) + " => \n" +(empIds));
-      alert(JSON.stringify(finalTeam));
       // const JData = {
       //   employee: skills,
       //   skills : promptresponse
@@ -116,12 +129,25 @@ export default function CreateTeam() {
 
   const handleSubmitTeam = (e) => {
     e.preventDefault();
-
+    
     const db = getFirestore(app);
     addDoc(collection(db, "team"), {
       pname,
       priority,
       currTeam,
+    }).then(() => {
+      navigate("/viewteams");
+    });
+  };
+
+  const handleSubmitAiTeam = (e) => {
+    e.preventDefault();
+    
+    const db = getFirestore(app);
+    addDoc(collection(db, "team"), {
+      pname,
+      priority,
+      currTeam:showCurrTeam,
     }).then(() => {
       navigate("/viewteams");
     });
@@ -269,7 +295,7 @@ export default function CreateTeam() {
                           <td className="px-6 py-4">{doc.dept}</td>
                           <td className="px-6 py-4">{doc.exp}</td>
                           <td className="px-6 py-4">
-                            <button
+                               <button
                               className="font-medium text-blue-600 hover:underline"
                               onClick={() =>
                                 setCurrTeam((prev) =>
@@ -319,8 +345,77 @@ export default function CreateTeam() {
             >
               Generate Team
             </button>
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+              <h2 className="p-7">New Team</h2>
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Name
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      ID
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Department
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Experience
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currTeam.map((doc) => {
+       
+                      // Check if the doc.id is in currTeam
+                      return (
+                        <tr
+                          key={doc.id}
+                          className="odd:bg-white even:bg-gray-50 border-b"
+                        >
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                          >
+                            {doc.fname}
+                          </th>
+                          <td className="px-6 py-4">{doc.empid}</td>
+                          <td className="px-6 py-4">{doc.dept}</td>
+                          <td className="px-6 py-4">{doc.exp}</td>
+                          <td className="px-6 py-4">
+                               <button
+                              className="font-medium text-blue-600 hover:underline"
+                              onClick={() =>
+                                setCurrTeam((prev) =>
+                                  prev.filter((id) => id !== doc.id)
+                                )
+                              }
+                            >
+                              remove
+                            </button>
+                          </td>
+                        </tr>
+                      );
+          
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex flex-cols gap-4 my-2 items-center justify-center">
+              <button className={buttonStyles} onClick={handleSubmitAiTeam}>
+                Create Team
+              </button>
+            </div>
           </div>
         )}
+        <div className="flex flex-cols gap-4 my-2 items-center justify-center">
+              <button className={buttonStyles} onClick={handleSubmitTeam}>
+                Create Team
+              </button>
+            </div>
       </div>
     </div>
   );
