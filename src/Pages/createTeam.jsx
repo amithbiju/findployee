@@ -8,6 +8,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { app } from "../firebase/config";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateTeam() {
@@ -19,6 +20,9 @@ export default function CreateTeam() {
   const [currTeam, setCurrTeam] = useState([]);
   const [showCurrTeam, setShowCurrTeam] = useState(false);
   const [priority, setPriority] = useState("low");
+  const [responseData, setResponseData] = useState("");
+  const [error, setError] = useState(null);
+  const [skills, setSkills] = useState([]);
   const [pname, setPName] = useState("");
 
   useEffect(() => {
@@ -43,6 +47,25 @@ export default function CreateTeam() {
     // Log the updated currTeam whenever it changes
     console.log("Current Team:", currTeam);
   }, [currTeam]);
+  const generatePrompt = async () => {
+    const jsonData = {
+      query: prompt,
+    };
+    try {
+      const response = await axios.post("http://localhost:8000/", jsonData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setResponseData(response.data);
+      const promptresponse = response.data;
+      const names = promptresponse.split(","); // Handle successful response
+      alert(names);
+    } catch (err) {
+      setError(err.response ? err.response.data : "An error occurred");
+      alert(err); // Handle error
+    }
+  };
 
   const buttonStyles =
     "bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50";
@@ -244,7 +267,14 @@ export default function CreateTeam() {
               }}
               name="promptSpace"
             />
-            <button className={buttonStyles}>Generate Team</button>
+            <button
+              className={buttonStyles}
+              onClick={() => {
+                generatePrompt();
+              }}
+            >
+              Generate Team
+            </button>
           </div>
         )}
       </div>
