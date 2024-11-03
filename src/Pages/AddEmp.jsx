@@ -71,9 +71,7 @@ function AddEmp() {
     }).then(() => {
       addDoc(collection(db, "skills"), {
         empid,
-        selectedSkills,
-        exp,
-        available,
+        selectedSkills
       }).then(() => {
         navigate("/dashboard");
       });

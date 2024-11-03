@@ -29,6 +29,7 @@ export default function CreateTeam() {
     // Set up Firestore listener and store unsubscribe function
     const db = getFirestore(app);
     const prodtCol = collection(db, "emplo");
+    const skillCol = collection(db,"skills");
     const unsubscribe = onSnapshot(prodtCol, (snapshot) => {
       const prodtList = snapshot.docs.map((product) => ({
         ...product.data(),
@@ -38,9 +39,18 @@ export default function CreateTeam() {
       // Update the state with the retrieved data
       setEmployees(prodtList);
     });
+    const skillunsubscribe = onSnapshot(skillCol, (snapshot) => {
+      const skillList = snapshot.docs.map((product) => ({
+        ...product.data(),
+        id: product.id,
+      }));
+      console.log(skillList);
+      // Update the state with the retrieved data
+      setSkills(skillList);
+    });
 
     // Return the unsubscribe function to clean up the listener when the component unmounts
-    return () => unsubscribe();
+    return () => {unsubscribe();skillunsubscribe();}
   }, []);
 
   useEffect(() => {
@@ -57,10 +67,44 @@ export default function CreateTeam() {
           "Content-Type": "application/json",
         },
       });
-      setResponseData(response.data);
-      const promptresponse = response.data;
-      const names = promptresponse.split(","); // Handle successful response
-      alert(names);
+      const promptresponse = (response.data.toLowerCase().split(','));
+      setResponseData(promptresponse);
+      //const names = promptresponse.split(""); // Handle successful response
+
+      // const filteredObjects = skills.filter(obj =>
+      //   obj.selectedSkills.some(value => responseData.includes(value.toLowerCase()))
+      // );
+
+
+      // Normalize input skills to lowercase and trim whitespace
+      const normalizedInputSkills = promptresponse.map(skill => skill.toLowerCase().trim());
+      console.log(normalizedInputSkills)
+
+      // Filter candidates based on the normalized skills
+      const suitableCandidates = skills.filter(candidate =>
+        candidate.selectedSkills.some(skill =>
+          normalizedInputSkills.includes(skill.toLowerCase().trim())
+        )
+      );
+
+      // Extract the empid of the suitable candidates
+      const empIds = suitableCandidates.map(candidate => candidate.empid);
+      const finalTeam = employees.filter( emp => ( empIds.includes(emp.empid))).filter(emp =>emp.available==true)
+      setShowCurrTeam(finalTeam);
+      //alert(promptresponse + " => \n" + JSON.stringify(skills) + " => \n" +(empIds));
+      alert(JSON.stringify(finalTeam));
+      // const JData = {
+      //   employee: skills,
+      //   skills : promptresponse
+      // };
+      // const getEmployeeIDresponse = await axios.post("http://localhost:8000/getEmpID", JData, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      // const employeeID = (getEmployeeIDresponse.data.toLowerCase().split(','));
+      // //alert(promptresponse + " => " + JSON.stringify(skills) + " => " + JSON.stringify(filteredObjects) + "=> "+employeeID);
+
     } catch (err) {
       setError(err.response ? err.response.data : "An error occurred");
       alert(err); // Handle error
@@ -256,7 +300,7 @@ export default function CreateTeam() {
             {/* /<input type='text' size={100} maxLength={100} className='m-3 border-2 rounded-lg text-start bg-gray-50 h-40 ' placeholder="Enter your prompt..." onChange={(e)=>{setPrompt(e.target.value)}}></input> */}
 
             <textarea
-              maxLength={100}
+              maxLength={1000}
               rows={4}
               cols={50}
               className="m-3 border-2 rounded-lg text-start bg-gray-50 "
