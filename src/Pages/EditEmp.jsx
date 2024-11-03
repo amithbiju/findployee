@@ -126,8 +126,6 @@ const EditEmp = () => {
       await updateDoc(skillsDocRef, {
         empid,
         selectedSkills,
-        exp,
-        available,
       });
 
       navigate("/dashboard");
