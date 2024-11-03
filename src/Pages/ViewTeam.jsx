@@ -6,7 +6,7 @@ import { app } from "../firebase/config";
 import { Link } from "react-router-dom";
 
 const ViewTeam = () => {
-  const [teams, setTeams] = useState();
+  const [teams, setTeams] = useState([]);
   useEffect(() => {
     // Set up Firestore listener and store unsubscribe function
     const db = getFirestore(app);
@@ -27,7 +27,7 @@ const ViewTeam = () => {
 
   return (
     <div className="pl-20 pr-20">
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+      <div className="relative mt-16 overflow-x-auto shadow-md sm:rounded-lg ">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>

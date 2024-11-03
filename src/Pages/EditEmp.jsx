@@ -7,6 +7,8 @@ import {
   collection,
   addDoc,
   onSnapshot,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import { app } from "../firebase/config";
 import { useNavigate, useParams } from "react-router-dom";
@@ -36,6 +38,7 @@ const EditEmp = () => {
   const [tags, setTags] = useState(initialTags);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [employee, setEmployee] = useState(null);
   useEffect(() => {
     // Set up Firestore listener and store unsubscribe function
     const db = getFirestore(app);
@@ -49,14 +52,32 @@ const EditEmp = () => {
       // Update the state with the retrieved data
       setEmployees(prodtList);
       //filter
-      const emp = employees.find((e) => e.id === productId);
-      console.log(emp);
+      console.log(productId);
       //setFName(emp.fname);
     });
 
     // Return the unsubscribe function to clean up the listener when the component unmounts
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    // Find the employee after employees state updates
+    if (employees.length > 0) {
+      const emp = employees.find((e) => e.id === productId);
+
+      if (emp) {
+        setEmployee(emp);
+        setUserName(emp.username);
+        setFName(emp.fname);
+        setLName(emp.lname);
+        setEmpid(emp.empid);
+        setEmail(emp.email);
+        setExp(emp.exp);
+        setDept(emp.dept);
+        setAvailable(emp.available);
+      }
+    }
+  }, [employees, productId]); // Trigger this effect when employees or productId changes
 
   // Toggle active state for each tag
   const toggleTag = (index) => {
@@ -84,29 +105,35 @@ const EditEmp = () => {
   const [available, setAvailable] = useState("");
 
   //todb
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const db = getFirestore(app);
-    addDoc(collection(db, "emplo"), {
-      lname,
-      fname,
-      username,
-      empid,
-      dept,
-      email,
-      exp,
-      available,
-    }).then(() => {
-      addDoc(collection(db, "skills"), {
+    try {
+      const db = getFirestore(app);
+      const empDocRef = doc(db, "emplo", productId); // Reference to the employee document
+      await updateDoc(empDocRef, {
+        lname,
+        fname,
+        username,
+        empid,
+        dept,
+        email,
+        exp,
+        available,
+      });
+
+      const skillsDocRef = doc(db, "skills", productId); // Reference to the skills document
+      await updateDoc(skillsDocRef, {
         empid,
         selectedSkills,
         exp,
         available,
-      }).then(() => {
-        navigate("/dashboard");
       });
-    });
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
   return (
     <form className="p-28">
