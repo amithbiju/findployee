@@ -108,18 +108,7 @@ const EditEmp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const db = getFirestore(app);
-    addDoc(collection(db, "emplo"), {
-      lname,
-      fname,
-      username,
-      empid,  
-      dept,
-      email,
-      exp,
-      available
-    }).then(() => {
-      addDoc(collection(db, "skills"), {
+    try {
       const db = getFirestore(app);
       const empDocRef = doc(db, "emplo", productId); // Reference to the employee document
       await updateDoc(empDocRef, {
@@ -130,17 +119,21 @@ const EditEmp = () => {
         dept,
         email,
         exp,
-        available
+        available,
       });
-      
+
       const skillsDocRef = doc(db, "skills", productId); // Reference to the skills document
       await updateDoc(skillsDocRef, {
         empid,
         selectedSkills,
-      }).then(() => {
-        navigate("/dashboard");
+        exp,
+        available,
       });
-    } 
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
   return (
     <form className="p-28">
